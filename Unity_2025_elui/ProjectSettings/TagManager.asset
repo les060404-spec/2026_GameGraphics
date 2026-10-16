@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Ground
   - Grounded
+  - Goal
+  - Triangle
+  - Trap
   layers:
   - Default
   - TransparentFX

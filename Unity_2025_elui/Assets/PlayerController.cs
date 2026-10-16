@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 public class PlayerController : MonoBehaviour
 {
+    public TMP_Text livesText;
     public string playerName = "Player";
     public int hp = 100;
     public int lives = 3;
@@ -16,12 +18,14 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded = false;
     private bool isGameOver = false;
     private float facing = 1f;
+    private GameObject gameOverPanel;
+
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         transform.position = startPosition;
-        Debug.Log(playerName + " 시작. 목숨 " + lives);
+        livesText.text="LIFE" + lives);
     }
     void OnMove(InputValue value)
     {
@@ -50,15 +54,7 @@ public class PlayerController : MonoBehaviour
             }
             if (transform.position.y < fallLimit)
             {
-                lives -= 1;
-                transform.position = startPosition;
-                rb.linearVelocity = Vector2.zero;
-                Debug.Log("낙사. 남은 목숨 " + lives);
-                if (lives <= 0)
-                {
-                    isGameOver = true;
-                    Debug.Log("게임 오버");
-                }
+                LoseLife();
             }
             if (isGrounded)
             { visual.localScale = new Vector3(facing, 1f, 1f); }
@@ -79,4 +75,27 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         { isGrounded = false; }
     }
-}
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Goal"))
+        {
+            Debug.Log("골인");
+        }
+        else if (other.CompareTag("Trap"))
+        {
+            LoseLife();
+        }
+    }
+    void LoseLife()
+    {
+        lives -= 1;
+        transform.position = startPosition;
+        rb.linearVelocity = Vector2.zero;
+        livesText.text = "LKFE" + lives;
+        if (lives <= 0)
+        {
+            isGameOver = true;
+            gameOverPanel.SetActive(true);
+        }
+    }
+}   
